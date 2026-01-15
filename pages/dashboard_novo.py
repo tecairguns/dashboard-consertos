@@ -29,11 +29,12 @@ layout = html.Div(
 
         # KPIs
         dbc.Row([
-            criar_kpi_card("Total Consertos", "kpi-total-interno", 6),
+            criar_kpi_card("Total Consertos", "kpi-total-interno", 4),
             dbc.Col(dbc.Card([
                 html.H6("Tempo Médio (Dias)", className="text-muted"),
                 html.H3(id="kpi-media-interno", style={"color": COLOR_TEXT_TITLE, "fontWeight": "bold"})
-            ], style=CARD_STYLE), width=12, md=6, className="mb-3"),
+            ], style=CARD_STYLE), width=12, md=4, className="mb-3"),
+            criar_kpi_card("Taxa Reincidência", "kpi-reincidencia-interno", 4),
         ]),
 
         # Gráfico de Evolução Mensal
@@ -76,6 +77,7 @@ layout = html.Div(
 @callback(
     [Output("kpi-total-interno", "children"),
      Output("kpi-media-interno", "children"),
+     Output("kpi-reincidencia-interno", "children"),
      Output("grafico-evolucao-interno", "figure"),
      Output("grafico-funcionarios", "figure"),
      Output("grafico-categorias-interno", "figure"),
@@ -110,6 +112,12 @@ def update_dashboard_interno(busca_modelo, filtro_ano, filtro_mes, filtro_garant
     # Calcular KPIs
     total = len(dff)
     media_diaria = f"{dff['Dias'].mean():.1f} dias" if not dff.empty and "Dias" in dff.columns else "0 dias"
+    
+    # Calcular Reincidência
+    reincidencia_txt = "0%"
+    if not dff.empty and "Reincidencia" in dff.columns:
+        perc_r = (dff[dff["Reincidencia"] == "Sim"].shape[0] / total) * 100 if total > 0 else 0
+        reincidencia_txt = f"{perc_r:.1f}%"
 
     # Gráfico 1: Evolução Mensal (Barras)
     if not dff.empty:
@@ -186,4 +194,4 @@ def update_dashboard_interno(busca_modelo, filtro_ano, filtro_mes, filtro_garant
         fig_modelos = px.bar(template="plotly_white")
         fig_modelos.update_layout(annotations=[dict(text="Sem dados", showarrow=False, font_size=16)])
 
-    return total, media_diaria, fig_evolucao, fig_funcionarios, fig_cat, fig_modelos
+    return total, media_diaria, reincidencia_txt, fig_evolucao, fig_funcionarios, fig_cat, fig_modelos
