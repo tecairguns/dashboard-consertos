@@ -145,3 +145,62 @@ def criar_filtros_novo_dashboard():
             style={"color": "#333"}
         ),
     ])
+
+
+def criar_filtros_atividades():
+    """
+    Cria os filtros específicos para o dashboard de atividades (Supabase)
+    
+    Returns:
+        html.Div: Container com filtros de atividades
+    """
+    # Importar aqui para evitar erros se as credenciais ainda não estiverem configuradas
+    try:
+        from supabase_service import get_employees, get_functions
+        
+        # Buscar funcionários e funções do Supabase
+        employees = get_employees()
+        functions = get_functions()
+        
+        # Preparar opções para os dropdowns
+        opcoes_funcionarios = [{"label": emp.get('name', ''), "value": emp.get('name', '')} for emp in employees]
+        opcoes_funcoes = [{"label": func.get('name', ''), "value": func.get('name', '')} for func in functions]
+    except Exception as e:
+        print(f"Erro ao carregar opções de filtros: {e}")
+        opcoes_funcionarios = []
+        opcoes_funcoes = []
+    
+    return html.Div([
+        html.Label("Filtros - Atividades", className="fw-bold text-white mb-3"),
+        html.Br(),
+        
+        html.Label("Funcionário(s)", className="fw-bold text-white mt-2"),
+        dcc.Dropdown(
+            id="filtro-funcionarios-atividades",
+            options=opcoes_funcionarios,
+            value=[],
+            multi=True,
+            placeholder="Selecione funcionários...",
+            style={"color": "#333"}
+        ),
+
+        html.Label("Função(ões)", className="fw-bold text-white mt-3"),
+        dcc.Dropdown(
+            id="filtro-funcoes-atividades",
+            options=opcoes_funcoes,
+            value=[],
+            multi=True,
+            placeholder="Selecione funções...",
+            style={"color": "#333"}
+        ),
+
+        html.Label("Período", className="fw-bold text-white mt-3"),
+        dcc.DatePickerRange(
+            id="filtro-periodo-atividades",
+            start_date_placeholder_text="Data Início",
+            end_date_placeholder_text="Data Fim",
+            display_format="DD/MM/YYYY",
+            style={"width": "100%"}
+        ),
+    ])
+

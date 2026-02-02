@@ -33,6 +33,12 @@ def criar_sidebar():
                     className="nav-link text-white d-block mb-2",
                     style={"padding": "8px 12px", "borderRadius": "5px", "backgroundColor": "rgba(255,255,255,0.1)"}
                 ),
+                dcc.Link(
+                    "Atividades",
+                    href="/atividades",
+                    className="nav-link text-white d-block mb-2",
+                    style={"padding": "8px 12px", "borderRadius": "5px", "backgroundColor": "rgba(255,255,255,0.1)"}
+                ),
             ]),
             
             html.Hr(style={"borderColor": "white", "marginTop": "30px"}),

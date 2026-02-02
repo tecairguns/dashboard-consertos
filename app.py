@@ -7,7 +7,7 @@ from dash import Dash, html, page_container, dcc, Input, Output, callback
 import dash_bootstrap_components as dbc
 
 from components.sidebar import criar_sidebar
-from components.filtros import criar_filtros_consertos, criar_filtros_novo_dashboard
+from components.filtros import criar_filtros_consertos, criar_filtros_novo_dashboard, criar_filtros_atividades
 
 # =====================================================================
 # INICIALIZAÇÃO DA APLICAÇÃO
@@ -47,6 +47,8 @@ def atualizar_filtros_sidebar(pathname):
         return criar_filtros_consertos()
     elif pathname == "/novo":
         return criar_filtros_novo_dashboard()
+    elif pathname == "/atividades":
+        return criar_filtros_atividades()
     return html.Div()
 
 
